@@ -1,0 +1,35 @@
+{
+  "name": "discord-bot-search-games",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/js-hackers/discord-bot-search-games.git"
+  },
+  "keywords": [
+    "discord",
+    "bot",
+    "search",
+    "games"
+  ],
+  "author": "Jesse Jackson <npm@jcksn.org> (https://jcksn.org)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/js-hackers/discord-bot-search-games/issues"
+  },
+  "homepage": "https://github.com/js-hackers/discord-bot-search-games#readme",
+  "dependencies": {
+    "discord.js": "^11.5.1",
+    "jsdom": "^15.1.1",
+    "node-fetch": "^2.6.0"
+  },
+  "devDependencies": {
+    "@jsejcksn/eslint-config": "^2.0.4",
+    "eslint": "^6.0.1"
+  }
+}

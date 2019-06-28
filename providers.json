@@ -1,0 +1,17 @@
+{
+  "Providers": {
+    "epic": "epic",
+    "itch": "itch",
+    "steam": "steam"
+  },
+  "ProvidersFormatted": {
+    "epic": "Epic Games",
+    "itch": "itch.io",
+    "steam": "Steam"
+  },
+  "BaseURLs": {
+    "epic": "https://www.epicgames.com/store/en-US/store-search?q=",
+    "itch": "https://itch.io/search?q=",
+    "steam": "https://store.steampowered.com/search/results?category1=998&term="
+  }
+}
