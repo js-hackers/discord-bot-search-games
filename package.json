@@ -1,6 +1,6 @@
 {
   "name": "discord-bot-search-games",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A chat bot that scrapes online game store search results and presents its findings",
   "main": "index.js",
   "scripts": {
