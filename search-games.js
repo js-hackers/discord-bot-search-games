@@ -8,7 +8,12 @@
 
 const fetch = require('node-fetch');
 const {JSDOM} = require('jsdom');
-const {Providers, BaseURLs} = require('./providers.json');
+const {
+  // Providers,
+  DataTypes,
+  ProviderDataTypes,
+  DataURLs,
+} = require('./providers.json');
 
 const parseResults = {
   epic (document) {
@@ -66,6 +71,167 @@ const parseResults = {
       const url = (() => {
         if (a.href) {
           return 'https://www.epicgames.com' + a.href;
+        }
+        return undefined;
+      })();
+
+      return {
+        id,
+        image,
+        platforms,
+        price,
+        release_date,
+        title,
+        url,
+      };
+    });
+  },
+
+  gog (json) {
+    // return json; // uncomment this line to see the entire json object
+    const results = json.products;
+    if (!results.length) throw {message: 'No results found'};
+    return results.map(item => {
+      const id = (() => {
+        if (item.id) {
+          return item.id;
+        }
+        return undefined;
+      })();
+
+      const image = (() => {
+        if (item.image) {
+          return 'https:' + item.image + '_product_tile_304.jpg';
+        }
+        return undefined;
+      })();
+      
+      const platforms = (() => {
+        const platforms = [];
+        const platformList = new Map([
+          ['android', 'android'],
+          ['ios', 'ios'],
+          ['linux', 'linux'],
+          ['mac', 'mac'],
+          ['windows', 'windows'],
+        ]);
+
+        if (item.supportedOperatingSystems) {
+          for (const platform of item.supportedOperatingSystems) {
+            if (platformList.has(platform)) {
+              platforms.push(platformList.get(platform));
+            }
+          }
+        }
+        return platforms;
+      })();
+      
+      const price = (() => {
+        if (
+          item.price.symbol
+          && item.price.finalAmount
+        ) {
+          return item.price.symbol + item.price.finalAmount;
+        }
+        return undefined;
+      })();
+      
+      const release_date = (() => {
+        if (!item.releaseDate) return undefined;
+        const date = new Date(item.releaseDate * 1000);
+        const formatted = (
+          `${date.getUTCFullYear()}`
+          + '-'
+          + `${date.getUTCMonth() + 1}`.padStart(2, '0')
+          + '-'
+          + `${date.getUTCDate()}`.padStart(2, '0')
+        );
+        return formatted;
+      })();
+      
+      const title = (() => {
+        if (item.title) {
+          return item.title;
+        }
+        return undefined;
+      })();
+
+      const url = (() => {
+        if (item.url) {
+          return 'https://www.gog.com' + item.url;
+        }
+        return undefined;
+      })();
+
+      return {
+        id,
+        image,
+        platforms,
+        price,
+        release_date,
+        title,
+        url,
+      };
+    });
+  },
+
+  humble (json) {
+    // return json; // uncomment this line to see the entire json object
+    const results = json.results;
+    if (!results.length) throw {message: 'No results found'};
+    return results.map(item => {
+      const id = (() => {
+        return undefined;
+      })();
+
+      const image = (() => {
+        if (item.standard_carousel_image) {
+          return item.standard_carousel_image;
+        }
+        return undefined;
+      })();
+
+      const platforms = (() => {
+        const platforms = [];
+        const platformList = new Map([
+          ['android', 'android'],
+          ['ios', 'ios'],
+          ['linux', 'linux'],
+          ['mac', 'mac'],
+          ['windows', 'windows'],
+        ]);
+
+        if (item.platforms) {
+          for (const platform of item.platforms) {
+            if (platformList.has(platform)) {
+              platforms.push(platformList.get(platform));
+            }
+          }
+        }
+        return platforms;
+      })();
+
+      const price = (() => {
+        if (item.current_price) {
+          return '$' + item.current_price[0];
+        }
+        return undefined;
+      })();
+
+      const release_date = (() => {
+        return undefined;
+      })();
+
+      const title = (() => {
+        if (item.human_name) {
+          return item.human_name;
+        }
+        return undefined;
+      })();
+
+      const url = (() => {
+        if (item.human_url) {
+          return 'https://www.humblebundle.com/store/' + item.human_url;
         }
         return undefined;
       })();
@@ -171,18 +337,24 @@ const parseResults = {
 
       const platforms = (() => {
         const platforms = [];
-        const platformList = [
-          'android',
-          'ios',
-          'linux',
-          'mac',
-          'win',
-        ];
-        for (const span of a.querySelectorAll('.platform_img')) {
-          for (const platform of platformList) {
-            if (span.classList.contains(platform)) {
-              platforms.push(platform);
-            }
+        const platformList = new Map([
+          ['android', 'android'],
+          ['ios', 'ios'],
+          ['linux', 'linux'],
+          ['mac', 'mac'],
+          ['win', 'windows'],
+        ]);
+        const providerPlatforms = new Set();
+
+        for (const span of a.querySelectorAll('span.platform_img')) {
+          for (const value of [...span.classList]) {
+            providerPlatforms.add(value);
+          }
+        }
+        
+        for (const platform of [...providerPlatforms]) {
+          if (platformList.has(platform)) {
+            platforms.push(platformList.get(platform));
           }
         }
         return platforms;
@@ -234,6 +406,10 @@ const parseResults = {
   },
 };
 
+function encode (uriComponent) {
+  return encodeURIComponent(uriComponent.trim());
+}
+
 function handleError (err) {
   if (err.message === 'No results found') throw {message: 'No results found. 😅'};
   else throw {
@@ -242,17 +418,27 @@ function handleError (err) {
 }
 
 module.exports = async function search (provider, query) {
-  query = encodeURIComponent(query.trim());
-  const baseURL = BaseURLs[Providers[provider]];
+  const baseURL = DataURLs[provider];
   try {
-    const res = await fetch(baseURL + query);
+    const res = await fetch(baseURL + encode(query));
     if (res.ok) {
-      const text = await res.text();
-      const {document} = (new JSDOM(text)).window;
-      ['script', 'style'].forEach(
-        tag => document.body.querySelectorAll(tag).forEach(el => el.remove())
-      );
-      return parseResults[Providers[provider]](document);
+      switch (ProviderDataTypes[provider]) {
+        case DataTypes.html: {
+          const text = await res.text();
+          const {document} = (new JSDOM(text)).window;
+          ['script', 'style'].forEach(
+            tag => document.body.querySelectorAll(tag).forEach(el => el.remove())
+          );
+          return parseResults[provider](document);
+        }
+        case DataTypes.json: {
+          const json = await res.json();
+          return parseResults[provider](json);
+        }
+        default: {
+          throw {message: 'No results found'};
+        }
+      }
     }
     else throw new Error('Fetch failed');
   }
