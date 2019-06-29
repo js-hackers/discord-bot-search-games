@@ -3,7 +3,7 @@
 
 const Discord = require('discord.js');
 const search = require('./search-games.js');
-const {Providers, ProvidersFormatted, BaseURLs} = require('./providers.json');
+const {Providers, ProvidersFormatted, SearchURLs} = require('./providers.json');
 
 function composeMessagesFromSearchResults (provider, query, ...results) {
   // It seems that Discord bots are rate-limited to 5 messages per 5 seconds
@@ -30,7 +30,7 @@ function composeMessagesFromSearchResults (provider, query, ...results) {
   if (moreResults) messages.push(new Discord.RichEmbed({
     author: {
       name: 'More search results',
-      url: BaseURLs[provider] + encodeURIComponent(query),
+      url: SearchURLs[provider] + encodeURIComponent(query),
     },
     description: (
       'See more search results for _'
@@ -77,6 +77,8 @@ async function handleMessage (msg) {
             + 'Right now, I can find games at:'
             + '\n'
             + '\n' + '  • `epic` (Epic Games)'
+            + '\n' + '  • `gog` (GOG)'
+            + '\n' + '  • `humble` (Humble Bundle)'
             + '\n' + '  • `itch` (itch.io)'
             + '\n' + '  • `steam` (Steam)'
             + '\n\n'

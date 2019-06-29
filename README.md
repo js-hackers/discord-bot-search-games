@@ -17,6 +17,8 @@ A Discord chat bot which scrapes online game marketplace search results and pres
   - `@bot` is a mention of the bot
   - `provider` is one of the supported game providers:
      - [`epic`](https://www.epicgames.com/)
+     - [`gog`](https://www.gog.com/)
+     - [`humble`](https://www.humblebundle.com/)
      - [`itch`](https://itch.io/)
      - [`steam`](https://store.steampowered.com/)
   - and `query` is the phrase you want to search
