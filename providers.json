@@ -1,16 +1,40 @@
 {
   "Providers": {
     "epic": "epic",
+    "gog": "gog",
+    "humble": "humble",
     "itch": "itch",
     "steam": "steam"
   },
   "ProvidersFormatted": {
     "epic": "Epic Games",
+    "gog": "GOG",
+    "humble": "Humble Bundle",
     "itch": "itch.io",
     "steam": "Steam"
   },
-  "BaseURLs": {
+  "DataTypes": {
+    "html": "html",
+    "json": "json"
+  },
+  "ProviderDataTypes": {
+    "epic": "html",
+    "gog": "json",
+    "humble": "json",
+    "itch": "html",
+    "steam": "html"
+  },
+  "DataURLs": {
     "epic": "https://www.epicgames.com/store/en-US/store-search?q=",
+    "gog": "https://www.gog.com/games/ajax/filtered?mediaType=game&page=1&sort=popularity&search=",
+    "humble": "https://www.humblebundle.com/store/api/search?sort=bestselling&filter=all&request=1&search=",
+    "itch": "https://itch.io/search?q=",
+    "steam": "https://store.steampowered.com/search/results?category1=998&term="
+  },
+  "SearchURLs": {
+    "epic": "https://www.epicgames.com/store/en-US/store-search?q=",
+    "gog": "https://www.gog.com/games?page=1&sort=popularity&search=",
+    "humble": "https://www.humblebundle.com/store/search?sort=bestselling&search=",
     "itch": "https://itch.io/search?q=",
     "steam": "https://store.steampowered.com/search/results?category1=998&term="
   }

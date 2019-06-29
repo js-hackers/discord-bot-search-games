@@ -4,11 +4,11 @@
 const fs = require('fs');
 const fetch = require('node-fetch');
 const {JSDOM} = require('jsdom');
-const {Providers, BaseURLs} = require('./providers.json');
+const {Providers, DataURLs} = require('./providers.json');
 
 module.exports = async function saveSearch (provider, query = '') {
   query = encodeURIComponent(query.trim());
-  const res = await fetch(BaseURLs[Providers[provider]] + query);
+  const res = await fetch(DataURLs[Providers[provider]] + query);
   const text = await res.text();
   const {document} = (new JSDOM(text)).window;
   ['script', 'style'].forEach(
