@@ -1,6 +1,6 @@
 {
   "name": "discord-bot-search-games",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "A chat bot that scrapes online game store search results and presents its findings",
   "main": "index.js",
   "scripts": {
@@ -30,6 +30,6 @@
   },
   "devDependencies": {
     "@jsejcksn/eslint-config": "^2.0.4",
-    "eslint": "^6.0.1"
+    "eslint": "^6.1.0"
   }
 }
