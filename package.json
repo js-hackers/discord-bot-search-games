@@ -2,9 +2,10 @@
   "name": "discord-bot-search-games",
   "version": "1.1.2",
   "description": "A chat bot that scrapes online game store search results and presents its findings",
-  "main": "index.js",
+  "type": "commonjs",
+  "main": "./index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node ./index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -24,12 +25,12 @@
   },
   "homepage": "https://github.com/js-hackers/discord-bot-search-games#readme",
   "dependencies": {
-    "discord.js": "^11.5.1",
-    "jsdom": "^15.1.1",
+    "discord.js": "^11.6.3",
+    "jsdom": "^15.2.1",
     "node-fetch": "^2.6.0"
   },
   "devDependencies": {
-    "@jsejcksn/eslint-config": "^2.0.4",
-    "eslint": "^6.1.0"
+    "@jsejcksn/eslint-config": "^3.1.0",
+    "eslint": "^6.8.0"
   }
 }
