@@ -26,7 +26,7 @@
   "homepage": "https://github.com/js-hackers/discord-bot-search-games#readme",
   "dependencies": {
     "discord.js": "^11.6.3",
-    "jsdom": "^15.2.1",
+    "jsdom": "^16.5.0",
     "node-fetch": "^3.1.1"
   },
   "devDependencies": {
